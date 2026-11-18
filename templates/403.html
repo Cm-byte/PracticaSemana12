@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Acceso denegado{% endblock %}
+{% block content %}
+<div class="ta-panel text-center py-5">
+  <span class="ta-icono mb-3" style="width:4rem;height:4rem;font-size:2rem"><i class="bi bi-shield-lock"></i></span>
+  <h1 class="h2">403 · Acceso denegado</h1>
+  <p class="text-secondary">Tu cuenta no tiene permiso para ver esta sección. Si eres instructora, pide a administración que te agregue al grupo <strong>Instructores</strong>.</p>
+  <a href="{% url 'academia:inicio' %}" class="btn btn-ta"><i class="bi bi-house-heart me-1"></i>Volver al inicio</a>
+</div>
+{% endblock %}

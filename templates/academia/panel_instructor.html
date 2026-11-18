@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Panel instructora{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0"><i class="bi bi-person-video3 me-2"></i>Panel de instructora</h1>
+  {% if perms.academia.add_curso %}<a href="{% url 'academia:curso_nuevo' %}" class="btn btn-ta"><i class="bi bi-plus-circle me-1"></i>Nuevo curso</a>{% endif %}
+</div>
+<p class="small text-secondary"><i class="bi bi-shield-lock me-1"></i>Requiere <code class="ta-code">@permission_required("academia.view_inscripcion")</code>.</p>
+<div class="row g-4">
+  <div class="col-lg-5">
+    <div class="ta-panel">
+      <h2 class="h5">Mis cursos</h2>
+      <ul class="list-group list-group-flush">
+        {% for c in cursos %}
+        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+          <span>{{ c.nombre }} {% if not c.activo %}<span class="badge text-bg-secondary">borrador</span>{% endif %}</span>
+          <span class="ta-chip"><i class="bi bi-people"></i>{{ c.n_inscritos }}/{{ c.cupos }}</span>
+        </li>
+        {% empty %}<li class="list-group-item px-0 text-secondary">Sin cursos asignados.</li>{% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="col-lg-7">
+    <div class="ta-panel">
+      <h2 class="h5">Últimas inscripciones</h2>
+      <table class="table table-sm mb-0">
+        <thead><tr><th>Alumna(o)</th><th>Curso</th><th>Estado</th></tr></thead>
+        <tbody>
+        {% for i in inscripciones %}
+          <tr><td>{{ i.alumno.get_full_name|default:i.alumno.username }}</td><td>{{ i.curso }}</td><td>{{ i.get_estado_display }}</td></tr>
+        {% empty %}<tr><td colspan="3" class="text-secondary">Sin inscripciones.</td></tr>{% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

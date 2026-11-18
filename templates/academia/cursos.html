@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Cursos{% endblock %}
+{% block content %}
+<h1 class="h2 mb-3">Cursos de tejido</h1>
+<form method="get" class="ta-panel row g-2 align-items-end mb-4">
+  <div class="col-md-5">
+    <label class="form-label small fw-semibold" for="q"><i class="bi bi-search me-1"></i>Buscar</label>
+    <input id="q" name="q" value="{{ filtro.q }}" class="form-control" placeholder="Ej. amigurumi, chompa, telar...">
+  </div>
+  <div class="col-md-3">
+    <label class="form-label small fw-semibold" for="nivel">Nivel</label>
+    <select id="nivel" name="nivel" class="form-select">
+      <option value="">Todos</option>
+      {% for v, t in niveles %}<option value="{{ v }}" {% if filtro.nivel == v %}selected{% endif %}>{{ t }}</option>{% endfor %}
+    </select>
+  </div>
+  <div class="col-md-3">
+    <label class="form-label small fw-semibold" for="categoria">Técnica</label>
+    <select id="categoria" name="categoria" class="form-select">
+      <option value="">Todas</option>
+      {% for c in categorias %}<option value="{{ c.slug }}" {% if filtro.categoria == c.slug %}selected{% endif %}>{{ c.nombre }}</option>{% endfor %}
+    </select>
+  </div>
+  <div class="col-md-1 d-grid"><button class="btn btn-ta" title="Filtrar"><i class="bi bi-funnel"></i></button></div>
+</form>
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+  {% for curso in cursos %}{% include "academia/_curso_card.html" %}
+  {% empty %}<p class="text-secondary"><i class="bi bi-info-circle me-1"></i>No hay cursos con esos filtros.</p>{% endfor %}
+</div>
+{% endblock %}

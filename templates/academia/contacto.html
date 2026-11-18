@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Contacto{% endblock %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-lg-7">
+    <div class="ta-panel">
+      <h1 class="h3 mb-1"><i class="bi bi-envelope-paper me-2"></i>Escríbenos</h1>
+      <p class="text-secondary small mb-4">Formulario clásico (<code class="ta-code">forms.Form</code>) con errores por campo y errores globales.</p>
+
+      {% if form.non_field_errors %}
+      <div class="alert alert-danger ta-errores-globales" role="alert">
+        <strong><i class="bi bi-x-octagon me-1"></i>Errores generales (__all__):</strong>
+        <ul class="mb-0">{% for e in form.non_field_errors %}<li>{{ e }}</li>{% endfor %}</ul>
+      </div>
+      {% endif %}
+
+      <form method="post" novalidate>
+        {% csrf_token %}
+        <div class="row">
+          <div class="col-md-6">{% include "academia/_campo.html" with field=form.nombre %}</div>
+          <div class="col-md-6">{% include "academia/_campo.html" with field=form.email %}</div>
+          <div class="col-md-6">{% include "academia/_campo.html" with field=form.asunto %}</div>
+          <div class="col-md-6">{% include "academia/_campo.html" with field=form.telefono %}</div>
+        </div>
+        {% include "academia/_campo.html" with field=form.mensaje %}
+        {% include "academia/_campo.html" with field=form.acepta_politica %}
+        <button class="btn btn-ta"><i class="bi bi-send me-1"></i>Enviar mensaje</button>
+      </form>
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="ta-panel mb-3">
+      <h2 class="h5"><i class="bi bi-geo-alt me-1"></i>Visítanos</h2>
+      <p class="mb-1">{{ ESCUELA.direccion }}</p>
+      <p class="mb-0"><i class="bi bi-telephone me-1"></i>{{ ESCUELA.telefono }}</p>
+    </div>
+    {% if form.errors %}
+    <div class="ta-panel">
+      <h2 class="h6"><i class="bi bi-list-check me-1"></i>Depuración: <code class="ta-code">{% templatetag openvariable %} form.errors {% templatetag closevariable %}</code></h2>
+      <div class="small">{{ form.errors }}</div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Solicitud rechazada{% endblock %}
+{% block content %}
+<div class="ta-panel text-center py-5">
+  <span class="ta-icono mb-3" style="width:4rem;height:4rem;font-size:2rem"><i class="bi bi-shield-lock"></i></span>
+  <h1 class="h2">403 · Verificación CSRF fallida</h1>
+  <p class="text-secondary">El formulario no incluía un token CSRF válido. Recarga la página e inténtalo de nuevo.</p>
+  {% if debug %}<p class="small"><code class="ta-code">{{ reason }}</code></p>{% endif %}
+  <a href="{% url 'academia:inicio' %}" class="btn btn-ta">Volver al inicio</a>
+</div>
+{% endblock %}

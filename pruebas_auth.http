@@ -1,0 +1,15 @@
+### Archivo para la extensión REST Client de VS Code
+### 1) Página pública: revisa cabeceras CSP, X-Frame-Options, X-Request-ID
+GET http://127.0.0.1:8000/
+
+### 2) Vista protegida sin sesión -> 302 a /cuentas/login/?next=...
+GET http://127.0.0.1:8000/mis-inscripciones/
+
+### 3) POST sin token CSRF -> 403 (CsrfViewMiddleware)
+POST http://127.0.0.1:8000/contacto/
+Content-Type: application/x-www-form-urlencoded
+
+nombre=Ana&email=ana@correo.pe&asunto=informes&mensaje=Hola+quiero+informes+del+curso&acepta_politica=on
+
+### 4) Logout por GET -> 405 (Django 5 sólo acepta POST)
+GET http://127.0.0.1:8000/cuentas/logout/

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Nuevo curso{% endblock %}
+{% block content %}
+<div class="ta-panel">
+  <h1 class="h3 mb-1"><i class="bi bi-plus-circle me-2"></i>Nuevo curso</h1>
+  <p class="small text-secondary mb-4">Protegido con <code class="ta-code">LoginRequiredMixin</code> + <code class="ta-code">PermissionRequiredMixin</code> (<code class="ta-code">academia.add_curso</code>). La imagen se registra por enlace.</p>
+  {% if form.non_field_errors %}
+    <div class="alert alert-danger ta-errores-globales">{% for e in form.non_field_errors %}<div>{{ e }}</div>{% endfor %}</div>
+  {% endif %}
+  <form method="post" novalidate>
+    {% csrf_token %}
+    <div class="row">
+      <div class="col-md-8">{% include "academia/_campo.html" with field=form.nombre %}</div>
+      <div class="col-md-4">{% include "academia/_campo.html" with field=form.categoria %}</div>
+      <div class="col-md-4">{% include "academia/_campo.html" with field=form.nivel %}</div>
+      <div class="col-md-4">{% include "academia/_campo.html" with field=form.modalidad %}</div>
+      <div class="col-md-4">{% include "academia/_campo.html" with field=form.horario %}</div>
+      <div class="col-12">{% include "academia/_campo.html" with field=form.descripcion %}</div>
+      <div class="col-12">{% include "academia/_campo.html" with field=form.imagen_url %}</div>
+      <div class="col-md-3">{% include "academia/_campo.html" with field=form.precio %}</div>
+      <div class="col-md-3">{% include "academia/_campo.html" with field=form.cupos %}</div>
+      <div class="col-md-3">{% include "academia/_campo.html" with field=form.fecha_inicio %}</div>
+      <div class="col-md-3">{% include "academia/_campo.html" with field=form.fecha_fin %}</div>
+    </div>
+    <button class="btn btn-ta"><i class="bi bi-check-circle-fill me-1"></i>Guardar curso</button>
+    <a href="{% url 'academia:panel_instructor' %}" class="btn btn-link">Cancelar</a>
+  </form>
+</div>
+{% endblock %}

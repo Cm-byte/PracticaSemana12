@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Inscripción{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-7">
+    <div class="ta-panel">
+      <h1 class="h3 mb-1"><i class="bi bi-journal-check me-2"></i>Inscripción a un curso</h1>
+      <p class="text-secondary small mb-4">ModelForm de <code class="ta-code">Inscripcion</code> renderizado con <code class="ta-code">{% templatetag openvariable %} form.as_p {% templatetag closevariable %}</code>.</p>
+
+      {% if form.errors %}
+      <div class="alert alert-danger ta-errores-globales small">
+        <strong><i class="bi bi-x-octagon me-1"></i>{% templatetag openvariable %} form.errors {% templatetag closevariable %}</strong>
+        {{ form.errors }}
+      </div>
+      {% endif %}
+
+      <form method="post" class="ta-form-asp">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-ta btn-lg"><i class="bi bi-check-circle-fill me-1"></i>Confirmar inscripción</button>
+        <a href="{% url 'academia:cursos' %}" class="btn btn-link">Volver</a>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

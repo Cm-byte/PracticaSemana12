@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Inicio{% endblock %}
+{% block content %}
+<section class="ta-hero mb-5" style="background-image:url('https://images.unsplash.com/photo-1789146501805-7221ff95bb3c?w=1600&q=70&auto=format&fit=crop')">
+  <div class="ta-hero-body">
+    <span class="ta-chip mb-3"><i class="bi bi-geo-alt"></i>Huancayo · Presencial y virtual</span>
+    <h1 class="mb-3">Aprende a tejer con tus propias manos</h1>
+    <p class="lead mb-4">Palitos, crochet y telar andino con maestras artesanas del Valle del Mantaro. Grupos pequeños y materiales incluidos.</p>
+    <div class="d-flex gap-2 flex-wrap">
+      <a href="{% url 'academia:cursos' %}" class="btn btn-ta btn-lg"><i class="bi bi-grid-3x3 me-1"></i>Ver cursos</a>
+      {% if user.is_authenticated %}
+        <a href="{% url 'academia:inscribirse' %}" class="btn btn-light btn-lg"><i class="bi bi-journal-check me-1"></i>Inscribirme</a>
+      {% else %}
+        <a href="{% url 'registro' %}" class="btn btn-light btn-lg"><i class="bi bi-person-plus me-1"></i>Crear cuenta</a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<section class="row g-3 mb-5">
+  {% for c in categorias %}
+  <div class="col-md-4">
+    <div class="ta-panel h-100 d-flex gap-3 align-items-start">
+      <span class="ta-icono"><i class="bi {{ c.icono }}"></i></span>
+      <div>
+        <h2 class="h5 mb-1">{{ c.nombre }}</h2>
+        <p class="small text-secondary mb-1">{{ c.descripcion }}</p>
+        <a class="small" href="{% url 'academia:cursos' %}?categoria={{ c.slug }}">{{ c.total }} curso{{ c.total|pluralize }} <i class="bi bi-arrow-right"></i></a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</section>
+
+<div class="d-flex justify-content-between align-items-end mb-3">
+  <h2 class="h3 mb-0">Próximos cursos</h2>
+  <a href="{% url 'academia:cursos' %}">Ver todos <i class="bi bi-arrow-right"></i></a>
+</div>
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-5">
+  {% for curso in cursos %}{% include "academia/_curso_card.html" %}{% endfor %}
+</div>
+
+{% if vistos %}
+<section class="ta-panel">
+  <h2 class="h5"><i class="bi bi-clock-history me-1"></i>Vistos recientemente <small class="text-secondary fw-normal">(guardado en tu sesión)</small></h2>
+  <div class="d-flex gap-2 flex-wrap">
+    {% for v in vistos %}<a class="ta-chip text-decoration-none" href="{{ v.get_absolute_url }}"><i class="bi bi-eye"></i>{{ v.nombre }}</a>{% endfor %}
+  </div>
+</section>
+{% endif %}
+{% endblock %}

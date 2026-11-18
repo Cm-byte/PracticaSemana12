@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Mi sesión{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3"><i class="bi bi-cookie me-2"></i>Auditoría de sesión</h1>
+<div class="row g-4">
+  <div class="col-lg-6">
+    <div class="ta-panel mb-4">
+      <h2 class="h5"><i class="bi bi-person-badge me-1"></i>Usuario autenticado</h2>
+      <table class="table table-sm ta-kv mb-0">
+        <tr><th>Usuario</th><td>{{ user.username }} ({{ user.get_full_name }})</td></tr>
+        <tr><th>Grupos</th><td>{% for g in grupos %}<span class="ta-chip me-1">{{ g }}</span>{% empty %}—{% endfor %}</td></tr>
+        <tr><th>is_staff / is_superuser</th><td>{{ user.is_staff|yesno:"Sí,No" }} / {{ user.is_superuser|yesno:"Sí,No" }}</td></tr>
+        <tr><th>Permisos (academia)</th><td class="small">{% for p in permisos %}<code class="ta-code d-inline-block mb-1">{{ p }}</code> {% empty %}—{% endfor %}</td></tr>
+        <tr><th>X-Request-ID</th><td><code class="ta-code">{{ request_id }}</code></td></tr>
+      </table>
+    </div>
+    <div class="ta-panel">
+      <h2 class="h5"><i class="bi bi-database me-1"></i>Contenido de <code class="ta-code">request.session</code></h2>
+      <table class="table table-sm ta-kv mb-0">
+        <tr><th>session_key</th><td><code class="ta-code">{{ session_key }}</code></td></tr>
+        <tr><th>Expira</th><td>{{ expira|date:"d/m/Y H:i:s" }}</td></tr>
+        {% for k, v in datos_sesion.items %}
+          {% if not k|slice:":1" == "_" %}<tr><th>{{ k }}</th><td><code class="ta-code">{{ v }}</code></td></tr>{% endif %}
+        {% endfor %}
+      </table>
+      <p class="small text-secondary mt-2 mb-0">Las claves internas de auth (<code class="ta-code">_auth_user_id</code>, <code class="ta-code">_auth_user_hash</code>) se ocultan.</p>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <div class="ta-panel">
+      <h2 class="h5"><i class="bi bi-gear me-1"></i>Configuración de sesión y cookies</h2>
+      <table class="table table-sm ta-kv mb-0">
+        {% for k, v in config.items %}<tr><th><code class="ta-code">{{ k }}</code></th><td>{{ v }}</td></tr>{% endfor %}
+      </table>
+      <p class="small text-secondary mt-3 mb-0"><i class="bi bi-info-circle me-1"></i>Abre DevTools &gt; Application &gt; Cookies para ver <code class="ta-code">tejearte_sid</code> (HttpOnly) y <code class="ta-code">csrftoken</code>; y en Network las cabeceras <code class="ta-code">Content-Security-Policy</code>, <code class="ta-code">X-Frame-Options</code> y <code class="ta-code">X-Request-ID</code>.</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

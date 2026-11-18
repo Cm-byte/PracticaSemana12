@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Crear cuenta{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-7">
+    <div class="ta-panel">
+      <h1 class="h3 mb-1"><i class="bi bi-person-plus me-2"></i>Crea tu cuenta de alumna(o)</h1>
+      <p class="small text-secondary mb-4">Al registrarte quedas en el grupo <strong>Alumnos</strong> y podrás inscribirte en cursos.</p>
+      {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
+      <form method="post" novalidate>
+        {% csrf_token %}
+        <div class="row">
+          <div class="col-md-6">{% include "academia/_campo.html" with field=form.first_name %}</div>
+          <div class="col-md-6">{% include "academia/_campo.html" with field=form.last_name %}</div>
+          <div class="col-md-6">{% include "academia/_campo.html" with field=form.username %}</div>
+          <div class="col-md-6">{% include "academia/_campo.html" with field=form.email %}</div>
+          <div class="col-md-6">{% include "academia/_campo.html" with field=form.password1 %}</div>
+          <div class="col-md-6">{% include "academia/_campo.html" with field=form.password2 %}</div>
+        </div>
+        <button class="btn btn-ta btn-lg"><i class="bi bi-person-plus me-1"></i>Registrarme</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

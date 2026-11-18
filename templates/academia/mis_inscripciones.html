@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Mis inscripciones{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0"><i class="bi bi-journal-check me-2"></i>Mis inscripciones</h1>
+  <a href="{% url 'academia:inscribirse' %}" class="btn btn-ta"><i class="bi bi-plus-circle me-1"></i>Nueva inscripción</a>
+</div>
+<p class="small text-secondary"><i class="bi bi-shield-lock me-1"></i>Vista protegida con <code class="ta-code">@login_required</code>: sólo ves tus propias inscripciones.</p>
+<div class="ta-panel p-0 overflow-hidden">
+  <table class="table align-middle mb-0">
+    <thead class="table-light"><tr><th>Curso</th><th>Inicio</th><th>Horario</th><th>Estado</th><th></th></tr></thead>
+    <tbody>
+    {% for i in inscripciones %}
+      <tr>
+        <td><a href="{{ i.curso.get_absolute_url }}" class="fw-semibold">{{ i.curso }}</a><div class="small text-secondary">{{ i.curso.categoria }}</div></td>
+        <td>{{ i.curso.fecha_inicio|date:"d/m/Y" }}</td>
+        <td class="small">{{ i.curso.horario }}</td>
+        <td>
+          {% if i.estado == 'confirmada' %}<span class="badge text-bg-success"><i class="bi bi-check-circle-fill me-1"></i>Confirmada</span>
+          {% elif i.estado == 'pendiente' %}<span class="badge text-bg-warning"><i class="bi bi-clock-history me-1"></i>Pendiente</span>
+          {% else %}<span class="badge text-bg-secondary">Cancelada</span>{% endif %}
+        </td>
+        <td class="text-end">
+          {% if i.estado != 'cancelada' %}
+          <form method="post" action="{% url 'academia:cancelar_inscripcion' i.pk %}" class="m-0">
+            {% csrf_token %}<button class="btn btn-sm btn-outline-secondary"><i class="bi bi-x-circle me-1"></i>Cancelar</button>
+          </form>
+          {% endif %}
+        </td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="5" class="text-center text-secondary py-4">Aún no tienes inscripciones.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

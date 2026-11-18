@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Ingresar{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-5">
+    <div class="ta-panel">
+      <div class="text-center mb-4">
+        <span class="ta-icono mb-2"><i class="bi bi-box-arrow-in-right"></i></span>
+        <h1 class="h3">Ingresa a TejeArte</h1>
+        {% if next and not user.is_authenticated %}<p class="small text-secondary mb-0"><i class="bi bi-shield-lock me-1"></i>Debes iniciar sesión para ver esa página.</p>{% endif %}
+      </div>
+      {% if form.non_field_errors %}
+        <div class="alert alert-danger small">{% for e in form.non_field_errors %}<div><i class="bi bi-x-octagon me-1"></i>{{ e }}</div>{% endfor %}</div>
+      {% endif %}
+      <form method="post" novalidate>
+        {% csrf_token %}
+        {% include "academia/_campo.html" with field=form.username %}
+        {% include "academia/_campo.html" with field=form.password %}
+        <input type="hidden" name="next" value="{{ next }}">
+        <button class="btn btn-ta w-100 btn-lg">Ingresar</button>
+      </form>
+      <p class="text-center small mt-3 mb-0">¿Nueva(o) en TejeArte? <a href="{% url 'registro' %}">Crea tu cuenta</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}

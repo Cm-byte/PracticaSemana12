@@ -1,0 +1,73 @@
+{% load static %}<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}TejeArte{% endblock %} · Escuela de tejido</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="{% static 'css/tejearte.css' %}">
+</head>
+<body class="d-flex flex-column min-vh-100">
+{% with url=request.resolver_match.url_name %}
+<nav class="navbar navbar-expand-lg ta-nav sticky-top">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'academia:inicio' %}">
+      <i class="bi bi-flower1"></i> {{ ESCUELA.nombre }}
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu" aria-label="Menú">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="menu">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item"><a class="nav-link {% if url == 'inicio' %}active{% endif %}" href="{% url 'academia:inicio' %}"><i class="bi bi-house-heart me-1"></i>Inicio</a></li>
+        <li class="nav-item"><a class="nav-link {% if url == 'cursos' or url == 'curso_detalle' %}active{% endif %}" href="{% url 'academia:cursos' %}"><i class="bi bi-grid-3x3 me-1"></i>Cursos</a></li>
+        <li class="nav-item"><a class="nav-link {% if url == 'contacto' %}active{% endif %}" href="{% url 'academia:contacto' %}"><i class="bi bi-envelope-paper me-1"></i>Contacto</a></li>
+        {% if user.is_authenticated %}
+        <li class="nav-item"><a class="nav-link {% if url == 'mis_inscripciones' %}active{% endif %}" href="{% url 'academia:mis_inscripciones' %}"><i class="bi bi-journal-check me-1"></i>Mis inscripciones</a></li>
+        {% endif %}
+        {% if es_instructor %}
+        <li class="nav-item"><a class="nav-link {% if url == 'panel_instructor' or url == 'curso_nuevo' %}active{% endif %}" href="{% url 'academia:panel_instructor' %}"><i class="bi bi-person-video3 me-1"></i>Panel instructora</a></li>
+        {% endif %}
+      </ul>
+      <div class="d-flex align-items-center gap-2">
+        {% if user.is_authenticated %}
+          <a class="btn btn-sm btn-light" href="{% url 'academia:sesion' %}" title="Mi sesión"><i class="bi bi-person-circle me-1"></i>{{ user.first_name|default:user.username }}</a>
+          {% if user.is_staff %}<a class="btn btn-sm btn-light" href="{% url 'admin:index' %}"><i class="bi bi-gear me-1"></i>Admin</a>{% endif %}
+          <form method="post" action="{% url 'logout' %}" class="m-0">
+            {% csrf_token %}
+            <button class="btn btn-sm btn-outline-ta" type="submit"><i class="bi bi-box-arrow-right me-1"></i>Salir</button>
+          </form>
+        {% else %}
+          <a class="btn btn-sm btn-light" href="{% url 'login' %}"><i class="bi bi-box-arrow-in-right me-1"></i>Ingresar</a>
+          <a class="btn btn-sm btn-ta" href="{% url 'registro' %}"><i class="bi bi-person-plus me-1"></i>Crear cuenta</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</nav>
+{% endwith %}
+
+<main class="container py-4 flex-grow-1">
+  {% if messages %}
+    {% for m in messages %}
+      <div class="alert alert-{{ m.tags }} alert-dismissible fade show d-flex align-items-center gap-2" role="alert">
+        {% if m.tags == 'success' %}<i class="bi bi-check-circle-fill"></i>{% elif m.tags == 'danger' %}<i class="bi bi-x-octagon"></i>{% elif m.tags == 'warning' %}<i class="bi bi-exclamation-triangle-fill"></i>{% else %}<i class="bi bi-info-circle-fill"></i>{% endif %}
+        <span>{{ m }}</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="ta-footer py-4 mt-4">
+  <div class="container d-flex flex-wrap justify-content-between gap-2 small">
+    <span><i class="bi bi-flower1 me-1"></i>{{ ESCUELA.nombre }} — {{ ESCUELA.lema }}</span>
+    <span><i class="bi bi-geo-alt me-1"></i>{{ ESCUELA.direccion }} · <i class="bi bi-telephone me-1"></i>{{ ESCUELA.telefono }}</span>
+    <span><i class="bi bi-cookie me-1"></i>Visitas en esta sesión: {{ request.session.visitas|default:0 }}</span>
+  </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
